@@ -1,14 +1,18 @@
-using Swashbuckle.AspNetCore.SwaggerUI;
+using WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IAppointmentsService, AppointmentsService>();
+
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -17,4 +21,11 @@ if (app.Environment.IsDevelopment())
         opt.SwaggerEndpoint("/openapi/v1.json", "v1");
     });
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
 app.Run();
